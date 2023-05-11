@@ -7,7 +7,7 @@ def start():
     print("Welcome to your ToDO List")
     print("------------------------------------------------------------")
     print("Please choose a number:")
-    print("1 - Login")
+    print("1- Login")
     print("2- Register")
     print("3- Quit")
     print()
@@ -79,17 +79,6 @@ def register():
 
     print("Registration successful!")
 
-
-class Task:
-    def __init__(self, name_With_description, deadline=None):
-        self.name = name_With_description
-        self.create_time = datetime.datetime.now()
-        self.deadline = deadline
-        self.completed = False
-
-    def complete(self):
-        self.completed = True
-
 class User:
     def __init__(self,name):
         self.username = name
@@ -99,7 +88,6 @@ class User:
         new_tasks = read_tasks(self.username,'new_task')
     def fill_completed_tasks(self):
         completed_tasks = read_tasks(self.username,'completed_tasks')
-
 
 def login():
     username = input("username: ")
@@ -135,7 +123,6 @@ def login():
 #         print(f"Error writing task to file: {e}")
 #         return
 
-
 def read_tasks(username, file_name):
     tasks = []
     try:
@@ -152,7 +139,6 @@ def read_tasks(username, file_name):
         print(f"Error reading tasks from file: {e}")
     return tasks
 
-
 def Home(obj_user):
     while True:
         print("Please choose a number:")
@@ -167,6 +153,10 @@ def Home(obj_user):
             view_tasks(obj_user)
         elif choice == "2":
              add_new_task(obj_user)
+        elif choice == "3":
+             mark_as_completed(obj_user)
+        elif choice == "4":
+             delete_task(obj_user)
         elif choice == "5":
             return
         else:
@@ -208,3 +198,25 @@ def add_new_task(obj_user):
     #         print("Task added successfully!")
     # except Exception as e:
     #     print(f"Error adding task: {e}")
+
+def mark_as_completed(obj_user):
+    view_tasks(obj_user)
+    print()
+    index = int("Enter Task Number: ")
+    obj_user.completed_tasks.append(obj_user.new_tasks[index - 1])
+    obj_user.new_tasks.pop(index-1)
+
+def delete_task(obj_user):
+    view_tasks(obj_user)
+    print()
+    choice = int("For completed task choose: 1 , for new tasks choose: 2")
+    index = int("Enter Task Number: ")
+    while True:
+        if choice == 1:
+            obj_user.completed_tasks.pop(index - 1)
+            break
+        elif choice == 2:
+            print(obj_user.new_tasks.pop(index - 1))
+            break
+        else:
+            choice = input("Please choose a valid number\n")
