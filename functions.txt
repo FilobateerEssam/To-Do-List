@@ -223,21 +223,21 @@ def delete_task(obj_user):
             break
         else:
             choice = input("Please choose a valid number\n")
-
+            
 def Quit(obj_user):
-
+    
     try:
         with open(f"{obj_user.username}/new_task.txt", "ab") as f:
             pickle.dump(obj_user.new_tasks, f)
             print("Task added successfully!")
     except Exception as e:
         print(f"Error adding task: {e}")
-
+    
     try:
         with open(f"{obj_user.username}/new_task.txt", "ab") as f:
             pickle.dump(obj_user.completed_tasks, f)
             print("Task added successfully!")
     except Exception as e:
         print(f"Error adding task: {e}")
-
-    return
+    
+    return 
