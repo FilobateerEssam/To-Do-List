@@ -6,10 +6,10 @@ from functionality import *
 
 user = start()
 
-
-
-
-
+if user != None:
+    Home(user)
+else:
+    print("Mohra 5n2tny")
 
 '''
 Pickle is a standard Python module that allows you to 

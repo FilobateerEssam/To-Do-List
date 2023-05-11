@@ -99,9 +99,7 @@ class User:
         new_tasks = read_tasks(self.username,'new_task')
     def fill_completed_tasks(self):
         completed_tasks = read_tasks(self.username,'completed_tasks')
-import os
-import pickle
-import datetime
+
 
 def login():
     username = input("username: ")
@@ -118,6 +116,7 @@ def login():
                         my_user.fill_new_tasks()
                         my_user.fill_completed_tasks()
                         print("Login successful!")
+
                         return my_user
                 except EOFError:
                     break
@@ -127,14 +126,14 @@ def login():
     # If no matching username and password found
     print("Invalid username or password.")
 
-def add_task(username, task_name, deadline):
-    task = Task(task_name, deadline)
-    try:
-        with open(f"{username}/new_task.txt", "ab") as f:
-            pickle.dump(task, f)
-    except Exception as e:
-        print(f"Error writing task to file: {e}")
-        return
+# def add_task_folder(username, task_name, deadline):
+#     task = Task(task_name, deadline)
+#     try:
+#         with open(f"{username}/new_task.txt", "ab") as f:
+#             pickle.dump(task, f)
+#     except Exception as e:
+#         print(f"Error writing task to file: {e}")
+#         return
 
 
 def read_tasks(username, file_name):
@@ -154,7 +153,7 @@ def read_tasks(username, file_name):
     return tasks
 
 
-def main(obj_user):
+def Home(obj_user):
     while True:
         print("Please choose a number:")
         print("1 - View tasks")
@@ -166,8 +165,8 @@ def main(obj_user):
         choice = input()
         if choice == "1":
             view_tasks(obj_user)
-        # elif choice == "2":
-            # add_new_task(username)
+        elif choice == "2":
+             add_new_task(obj_user)
         elif choice == "5":
             return
         else:
@@ -193,16 +192,19 @@ def add_new_task(obj_user):
         deadline = input("Deadline (yyyy-mm-dd): ")
         try:
             deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d")
+
         except ValueError:
             print("Invalid date format!")
             return
-        task = Task(name_With_description, deadline)
+        obj_user.new_tasks.append(name_With_description + " Due Date :  " + str(deadline))
+
     else:
-        task = Task(name_With_description)
-    # Save the new task to file using pickle
-    try:
-        with open(f"{obj_user.username}/new_task.txt", "ab") as f:
-            pickle.dump(task, f)
-            print("Task added successfully!")
-    except Exception as e:
-        print(f"Error adding task: {e}")
+        obj_user.new_tasks.append(name_With_description)
+
+    # # Save the new task to file using pickle
+    # try:
+    #     with open(f"{obj_user.username}/new_task.txt", "ab") as f:
+    #         pickle.dump(task, f)
+    #         print("Task added successfully!")
+    # except Exception as e:
+    #     print(f"Error adding task: {e}")
