@@ -2,8 +2,6 @@ import os
 import pickle
 import datetime
 
-from cryptography import fernet
-
 def start():
     print("------------------------------------------------------------")
     print("Welcome to your ToDO List")
@@ -119,11 +117,8 @@ def read_tasks(username, file_name):
     tasks = []
     try:
         with open(f"{username}/{file_name}.txt", "rb") as f:
-            data = pickle.loads(f)
-            for s in data:
-                tasks.append(s)
-            # decrypted_data = fernet.Fernet.decrypt(data)
-            # tasks = decrypted_data.splitlines()
+            data = f.read()
+            tasks = pickle.loads(data)
     except FileNotFoundError:
         pass
     except Exception as e:
