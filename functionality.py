@@ -2,6 +2,8 @@ import os
 import pickle
 import datetime
 
+from cryptography import fernet
+
 def start():
     print("------------------------------------------------------------")
     print("Welcome to your ToDO List")
@@ -17,7 +19,6 @@ def start():
     while True:
         if choice == '1':
             return login()
-            # break
         elif choice == '2':
             return register()
         elif choice == '3':
@@ -114,25 +115,15 @@ def login():
     # If no matching username and password found
     print("Invalid username or password.")
 
-# def add_task_folder(username, task_name, deadline):
-#     task = Task(task_name, deadline)
-#     try:
-#         with open(f"{username}/new_task.txt", "ab") as f:
-#             pickle.dump(task, f)
-#     except Exception as e:
-#         print(f"Error writing task to file: {e}")
-#         return
-
 def read_tasks(username, file_name):
     tasks = []
     try:
         with open(f"{username}/{file_name}.txt", "rb") as f:
-            while True:
-                try:
-                    task = pickle.load(f)
-                    tasks.append(task)
-                except EOFError:
-                    break
+            data = pickle.loads(f)
+            for s in data:
+                tasks.append(s)
+            # decrypted_data = fernet.Fernet.decrypt(data)
+            # tasks = decrypted_data.splitlines()
     except FileNotFoundError:
         pass
     except Exception as e:
@@ -193,36 +184,32 @@ def add_new_task(obj_user):
 
     else:
         obj_user.new_tasks.append(name_With_description)
-
-    # # Save the new task to file using pickle
-    # try:
-    #     with open(f"{obj_user.username}/new_task.txt", "ab") as f:
-    #         pickle.dump(task, f)
-    #         print("Task added successfully!")
-    # except Exception as e:
-    #     print(f"Error adding task: {e}")
-
 def mark_as_completed(obj_user):
     view_tasks(obj_user)
     print()
-    index = int(input("Enter Task Number: "))
-    obj_user.completed_tasks.append(obj_user.new_tasks[index - 1])
-    obj_user.new_tasks.pop(index-1)
-
+    try:
+        index = int(input("Enter Task Number: "))
+        obj_user.completed_tasks.append(obj_user.new_tasks[index - 1])
+        obj_user.new_tasks.pop(index-1)
+    except ValueError:
+        print("Not a valid number")
 def delete_task(obj_user):
     view_tasks(obj_user)
     print()
-    choice = int(input("For completed task choose: 1 , for new tasks choose: 2"))
-    index = int(input("Enter Task Number: "))
-    while True:
-        if choice == 1:
-            obj_user.completed_tasks.pop(index - 1)
-            break
-        elif choice == 2:
-            print(obj_user.new_tasks.pop(index - 1))
-            break
-        else:
-            choice = input("Please choose a valid number\n")
+    try:
+        choice = int(input("For completed task choose: 1 , for new tasks choose: 2\n"))
+        index = int(input("Enter Task Number: "))
+        while True:
+            if choice == 1:
+                obj_user.completed_tasks.pop(index - 1)
+                break
+            elif choice == 2:
+                print(obj_user.new_tasks.pop(index - 1))
+                break
+            else:
+                choice = input("Please choose a valid number\n")
+    except ValueError:
+        print("Not a valid number")
 
 def Quit(obj_user):
 
