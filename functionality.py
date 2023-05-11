@@ -2,8 +2,6 @@ import os
 import pickle
 import datetime
 
-from cryptography import fernet
-
 def start():
     print("------------------------------------------------------------")
     print("Welcome to your ToDO List")
@@ -32,7 +30,7 @@ def register():
     password = input("Password: ")
     # Check if username already exists in File Users
     try:
-        with open("Users.txt", "rb") as f:
+        with open("Users.pkl", "rb") as f:
             while True:
                 try:
                     user = pickle.load(f)
@@ -49,7 +47,7 @@ def register():
 
     # Write user data in Users file using pickle
     try:
-        with open("Users.txt", "ab") as f:
+        with open("Users.pkl", "ab") as f:
             pickle.dump(user, f)
     except Exception as e:
         print(f"Error writing to Users file: {e}")
@@ -64,18 +62,18 @@ def register():
 
     # Create new task file
     try:
-        with open(f"{username}/new_task.txt", "w") as f:
+        with open(f"{username}/new_task.pkl", "w") as f:
             pass
     except Exception as e:
-        print(f"Error creating new_task.txt: {e}")
+        print(f"Error creating new_task.pkl: {e}")
         return
 
     # Create completed file
     try:
-        with open(f"{username}/completed_tasks.txt", "w") as f:
+        with open(f"{username}/completed_tasks.pkl", "w") as f:
             pass
     except Exception as e:
-        print(f"Error creating completed.txt: {e}")
+        print(f"Error creating completed.pkl: {e}")
         return
 
     print("Registration successful!")
@@ -95,7 +93,7 @@ def login():
     password = input("Password: ")
     # Load user data from Users file using pickle
     try:
-        with open("Users.txt", "rb") as f:
+        with open("Users.pkl", "rb") as f:
             while True:
                 try:
                     user = pickle.load(f)
@@ -118,13 +116,13 @@ def login():
 def read_tasks(username, file_name):
     tasks = []
     try:
-        with open(f"{username}/{file_name}.txt", "rb") as f:
-            data = pickle.loads(f)
+        with open(f"{username}/{file_name}.pkl", "rb") as f:
+            data = pickle.load(f, encoding='utf-8')
             for s in data:
                 tasks.append(s)
-            # decrypted_data = fernet.Fernet.decrypt(data)
-            # tasks = decrypted_data.splitlines()
     except FileNotFoundError:
+        pass
+    except EOFError:
         pass
     except Exception as e:
         print(f"Error reading tasks from file: {e}")
@@ -214,14 +212,14 @@ def delete_task(obj_user):
 def Quit(obj_user):
 
     try:
-        with open(f"{obj_user.username}/new_task.txt", "ab") as f:
+        with open(f"{obj_user.username}/new_task.pkl", "ab") as f:
             pickle.dump(obj_user.new_tasks, f)
             print("Task added successfully!")
     except Exception as e:
         print(f"Error adding task: {e}")
 
     try:
-        with open(f"{obj_user.username}/new_task.txt", "ab") as f:
+        with open(f"{obj_user.username}/new_task.pkl", "ab") as f:
             pickle.dump(obj_user.completed_tasks, f)
             print("Task added successfully!")
     except Exception as e:

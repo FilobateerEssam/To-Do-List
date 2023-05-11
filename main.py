@@ -1,9 +1,5 @@
 from functionality import *
 
-# register('filo2', 'filoEssam@example.com', 'password123')
-# login(email,password)
-
-
 user = start()
 
 if user != None:
