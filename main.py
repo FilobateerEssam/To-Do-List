@@ -4,7 +4,8 @@ from functionality import *
 # login(email,password)
 
 
-Opening = start()
+user = start()
+
 
 
 
