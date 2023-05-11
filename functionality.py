@@ -169,11 +169,13 @@ def view_tasks(obj_user):
         print("No tasks found.")
     else:
         print("New tasks:")
-        for task in new_tasks:
-            print(task)
+        for i,task in enumerate(new_tasks):
+            print(f"{i+1}. {task}")
+
         print("Completed tasks:")
-        for task in completed_tasks:
-            print(task)
+
+        for i, task in enumerate(completed_tasks):
+            print(f"{i+1}. {task}")
 
 def add_new_task(obj_user):
     name_With_description = input("Enter Task : ")
@@ -202,15 +204,15 @@ def add_new_task(obj_user):
 def mark_as_completed(obj_user):
     view_tasks(obj_user)
     print()
-    index = int("Enter Task Number: ")
+    index = int(input("Enter Task Number: "))
     obj_user.completed_tasks.append(obj_user.new_tasks[index - 1])
     obj_user.new_tasks.pop(index-1)
 
 def delete_task(obj_user):
     view_tasks(obj_user)
     print()
-    choice = int("For completed task choose: 1 , for new tasks choose: 2")
-    index = int("Enter Task Number: ")
+    choice = int(input("For completed task choose: 1 , for new tasks choose: 2"))
+    index = int(input("Enter Task Number: "))
     while True:
         if choice == 1:
             obj_user.completed_tasks.pop(index - 1)
