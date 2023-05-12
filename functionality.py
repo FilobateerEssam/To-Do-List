@@ -36,7 +36,6 @@ def register():
                     user = pickle.load(f)
                     if user["username"] == username:
                         print("Username already exists!")
-                        return User(username)
                 except EOFError:
                     break
     except FileNotFoundError:
@@ -62,7 +61,7 @@ def register():
 
     # Create new task file
     try:
-        with open(f"{username}/new_task.pkl", "w") as f:
+        with open(f"{username}/new_task.pkl", "wb") as f:
             pass
     except Exception as e:
         print(f"Error creating new_task.pkl: {e}")
@@ -70,13 +69,14 @@ def register():
 
     # Create completed file
     try:
-        with open(f"{username}/completed_tasks.pkl", "w") as f:
+        with open(f"{username}/completed_tasks.pkl", "wb") as f:
             pass
     except Exception as e:
         print(f"Error creating completed.pkl: {e}")
         return
 
     print("Registration successful!")
+    return User(username)
 
 class User:
     def _init_(self,name):
@@ -84,9 +84,9 @@ class User:
         self.new_tasks = []
         self.completed_tasks = []
     def fill_new_tasks(self):
-        new_tasks = read_tasks(self.username,'new_task')
+        self.new_tasks = read_tasks(self.username,'new_task')
     def fill_completed_tasks(self):
-        completed_tasks = read_tasks(self.username,'completed_tasks')
+        self.completed_tasks = read_tasks(self.username,'completed_tasks')
 
 def login():
     username = input("username: ")
@@ -103,21 +103,22 @@ def login():
                         my_user.fill_new_tasks()
                         my_user.fill_completed_tasks()
                         print("Login successful!")
-
                         return my_user
+
                 except EOFError:
                     break
     except FileNotFoundError:
         print("No users found.")
-        return
+        return start()
     # If no matching username and password found
     print("Invalid username or password.")
+    return start()
 
 def read_tasks(username, file_name):
     tasks = []
     try:
         with open(f"{username}/{file_name}.pkl", "rb") as f:
-            data = pickle.load(f, encoding='utf-8')
+            data = pickle.load(f)
             for s in data:
                 tasks.append(s)
     except FileNotFoundError:
@@ -212,14 +213,14 @@ def delete_task(obj_user):
 def Quit(obj_user):
 
     try:
-        with open(f"{obj_user.username}/new_task.pkl", "ab") as f:
+        with open(f"{obj_user.username}/new_task.pkl", "wb") as f:
             pickle.dump(obj_user.new_tasks, f)
             print("Task added successfully!")
     except Exception as e:
         print(f"Error adding task: {e}")
 
     try:
-        with open(f"{obj_user.username}/new_task.pkl", "ab") as f:
+        with open(f"{obj_user.username}/completed_tasks.pkl", "wb") as f:
             pickle.dump(obj_user.completed_tasks, f)
             print("Task added successfully!")
     except Exception as e:
