@@ -79,7 +79,7 @@ def register():
     return User(username)
 
 class User:
-    def _init_(self,name):
+    def __init__(self,name):
         self.username = name
         self.new_tasks = []
         self.completed_tasks = []
