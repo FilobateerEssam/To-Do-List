@@ -28,6 +28,7 @@ def register():
     username = input("Username: ")
     email = input("Email: ")
     password = input("Password: ")
+
     # Check if username already exists in File Users
     try:
         with open("Users.pkl", "rb") as f:
@@ -79,10 +80,11 @@ def register():
     return User(username)
 
 class User:
-    def _init_(self,name):
+    def __init__(self,name):
         self.username = name
         self.new_tasks = []
         self.completed_tasks = []
+
     def fill_new_tasks(self):
         self.new_tasks = read_tasks(self.username,'new_task')
     def fill_completed_tasks(self):
